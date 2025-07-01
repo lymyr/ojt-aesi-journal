@@ -1,0 +1,148 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+import s from "./AddEntry.module.css";
+import Button from "./Button";
+
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.withCredentials = true;
+axios.defaults.withXSRFToken = true;
+
+axios.interceptors.request.use(config => {
+  const token = getCookie('XSRF-TOKEN');
+  if (token) {
+    config.headers['X-XSRF-TOKEN'] = decodeURIComponent(token);
+  }
+  return config;
+});
+
+
+function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate }) {
+    const [date, setDate] = useState(cDate);
+    const [mood, setMood] = useState("");
+    const [entry, setEntry] = useState("");
+    const [clickedEdit, setclickedEdit] = useState(false);
+
+    useEffect(() => {
+        if (edit && editEntry) {
+            setDate(editEntry.date || getTodayDate());
+            setMood(editEntry.mood || "");
+            setEntry(editEntry.journal_entry || "");
+        }
+    }, [edit, editEntry]);
+
+    function getTodayDate() {
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0');
+        let yyyy = today.getFullYear();
+        return `${yyyy}-${mm}-${dd}`;
+    }
+
+
+    function handleDelete() {
+        if (!editEntry || !editEntry.id) {
+            alert("No entry selected to delete.");
+            return;
+        }
+
+        if (!confirm("Are you sure you want to delete this entry?")) return;
+
+        axios.get('/sanctum/csrf-cookie').then(() => {
+            axios.delete(`/api/entries/${editEntry.id}`)
+                .then(() => {
+                    ref?.current?.close();
+                    axios.get('/api/entries')
+                        .then(r => setEntryList(r.data)); // refresh the list
+                })
+                .catch(err => {
+                    console.error("Failed to delete entry:", err);
+                    alert("Delete failed.");
+                });
+        });
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+
+        axios.get('/sanctum/csrf-cookie').then(() => {
+                axios.post('/api/entries', {
+                mood: mood, 
+                journal_entry: entry,
+                date: date
+            }).then(res => {
+                ref?.current?.close();
+                axios.get('/api/entries')
+                    .then(r => setEntryList(r.data));
+                setDate(cDate);
+                setMood("");
+                setEntry("");
+            }).catch(err => {
+                console.error(err);
+                alert('Failed to save journal entry.');
+            });
+        });
+    }
+
+
+    return (
+        <dialog className={s.dialog} ref={ref}>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>Date:</label>
+                    <input type="date" min='1900-01-01' max={cDate} value={date} onChange={e => setDate(e.target.value)} required disabled={edit}/>
+                </div>
+
+                <fieldset>
+                    <legend>How are you feeling today?</legend>
+                    {["Horrible", "Bad", "Neutral", "Good", "Great"].map((label, index) => (
+                        <label key={index}>
+                        <input
+                            type="radio"
+                            name="mood"
+                            value={label}
+                            checked={mood === label}
+                            onChange={e => setMood(e.target.value)}
+                            required
+                            disabled={edit && !clickedEdit}
+                        />
+                        {["😔", "☹️", "😐", "🙂", "🤩"][index]} {label}
+                        </label>
+                    ))}
+                </fieldset>
+
+                <div>
+                    <label>Journal Entry</label>
+                    <textarea
+                        spellCheck="false"
+                        placeholder='Write down your thoughts...'
+                        value={entry}
+                        onChange={e => setEntry(e.target.value)}
+                        disabled={edit && !clickedEdit}
+                    ></textarea>
+                </div>
+
+                <div>
+                    <Button text="Close" type="button" onClick={() => {ref?.current?.close(); setclickedEdit(false);}} />
+
+                    {edit? (clickedEdit? 
+                                <>
+                                <Button text="Delete" type="button" onClick={handleDelete}/> 
+                                <Button text="Save" />
+                                </> 
+                            : <Button text="Edit" type="button" onClick={() => setclickedEdit(true)}/>)
+    
+                        : <Button text="Submit"/>}
+                </div>
+            </form>
+        </dialog>
+    );
+    }
+
+export default AddEntry;

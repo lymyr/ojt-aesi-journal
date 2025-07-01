@@ -1,0 +1,19 @@
+.btn {
+    width:102px;
+    border-radius: 8px;
+    border: none;
+    padding:4px;
+    cursor: pointer;
+    letter-spacing: 1px;
+
+    background-color: rgb(58, 65, 113);
+    color:rgb(255, 255, 255);
+    font-weight: 900;
+}
+
+.btn:hover {
+    box-shadow: -1px -1px 4px rgb(58, 58, 58);
+    transition: 200ms;
+    position: relative;
+    top:1px;
+}

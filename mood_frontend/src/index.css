@@ -1,0 +1,25 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+:root {
+  font-family: Arial, Helvetica, sans-serif;
+}
+body {
+  /* 4. Add accessible line-height */
+  line-height: 1.5;
+  /* 5. Improve text rendering */
+  -webkit-font-smoothing: antialiased;
+
+  background-color: rgb(220, 225, 237);
+}
+
+input, button, textarea, select {
+  font: inherit;
+}

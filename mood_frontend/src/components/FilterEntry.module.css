@@ -1,0 +1,56 @@
+.form {
+    background-color: rgb(202, 164, 125);
+    padding:24px;
+    padding-left: 32px;
+    color: rgb(241, 241, 241);
+    justify-content: center;
+}
+
+.form label {
+    font-weight: 600;
+    font-size: 1.4rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-right: 16px;
+}
+.form > div {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap:8px;
+    justify-content: center;
+}
+
+.form button {
+    margin-left: 16px;
+    align-self: end;
+}
+
+.form input, .form select {
+    padding:4px 8px;
+    letter-spacing: 1px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-color: rgb(255, 246, 233);
+    width:200px;
+}
+.form select:hover,
+.form input:hover {
+    background-color: rgb(232, 219, 203);
+    transition: 200ms;
+}
+
+.form select:focus,
+.form input:focus {
+    background-color: #ffffff;
+    box-shadow: 0px 1px 8px rgb(78, 70, 62);
+}
+
+.form > div > div {
+    display:flex;
+    gap:8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}

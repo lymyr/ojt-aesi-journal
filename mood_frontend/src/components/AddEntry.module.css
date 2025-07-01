@@ -1,0 +1,171 @@
+.dialog {
+    /* top:30%;
+    transform: translateX(-50%);
+    left: 50%; */
+    margin: auto;
+    background-color: rgb(119, 96, 86);
+    padding:1.5rem;
+    width: max(600px, 70vw);
+    border: none;
+}
+.dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.dialog > p {
+    color:rgb(212, 199, 195);
+    font-weight: 900;
+    letter-spacing: 2px;
+    padding:0px 0px 12px 12px;
+}
+.dialog form {
+    display:grid;
+    grid-template-columns: 280px 1fr;
+    grid-template-areas:
+        "date date" 
+        "mood journal"
+        "btn btn";
+    gap:16px;
+}
+.dialog form > div label,
+.dialog legend {
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding:16px 16px;
+    background-color: rgb(153, 130, 111);
+    color:rgb(255, 255, 255);
+    border-radius: 4px 4px 0px 0px;
+    margin: auto;
+    width:100%;
+}
+
+
+
+.dialog fieldset {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(245, 222, 200);
+    padding: 0;
+    border:none;
+    grid-area: mood;
+}
+.dialog fieldset input {
+    margin-right: 4px;
+    appearance: none;
+}
+
+.dialog fieldset label {
+    cursor: pointer;
+    padding:12px;
+    font-size: 0.8rem;
+}
+.dialog fieldset label:hover {
+    background-color: rgb(255, 239, 226);
+    transition: 200ms;
+}
+.dialog fieldset label:has(input:disabled) {
+    background-color: rgb(231, 224, 220);
+    color: rgb(151, 151, 151);
+}
+.dialog fieldset label:has(input:checked) {
+    font-weight: bold;
+    background-color: rgb(255, 249, 244);
+    transition: 200ms;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
+}
+
+.dialog form > div:nth-child(3) {
+    display: flex;
+    flex-direction: column;
+    grid-area: journal;
+}
+.dialog form > div:nth-child(3) > textarea {
+    background-color: rgb(238, 216, 172);
+    resize:none;
+    border:none;
+    outline: none;
+    padding:12px;
+    box-sizing: border-box;
+    color:rgb(105, 95, 77);
+    height: 100%;
+}
+.dialog form > div:nth-child(3) textarea:focus {
+    background-color: white;
+    color:black;
+    transition: 200ms;
+}
+.dialog form > div:nth-child(3) textarea:disabled {
+    background-color: rgb(193, 175, 140);
+    color: rgb(129, 129, 129);
+}
+
+.dialog form > div:nth-child(1) {    
+    grid-area: date;
+    align-self: left;
+}
+.dialog form > div:nth-child(1) label {
+    padding:0;
+    background-color: transparent;
+    width:fit-content;
+    margin-right: 8px;
+}
+.dialog form > div:nth-child(1) input {
+    background-color: rgb(199, 176, 168);
+    padding:4px 12px;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+}
+.dialog form > div:nth-child(1) input:hover {    
+    background-color: rgb(214, 194, 188);
+    cursor: text;
+}
+.dialog form > div:nth-child(1) input:focus {
+    background-color: white;
+    box-shadow: 2px 2px 8px black;
+}
+
+.dialog form > div:nth-child(4) {
+    grid-area: btn;
+    justify-self: end;
+    display: flex;
+    gap:20px;
+}
+.dialog form button:first-child {
+    background-color: rgb(80, 57, 45);
+    color: rgb(178, 164, 157);
+}
+.dialog form button:nth-child(2) {
+    background-color: rgb(128, 46, 46);
+    color: rgb(216, 159, 159);
+}
+.dialog form button:last-child {
+    background-color: rgb(236, 211, 183);
+    color: black;  
+}
+.dialog form button:hover {
+    box-shadow: none;
+}
+
+
+
+
+
+@media only screen and (max-width: 600px) {
+    .dialog form {
+        grid-template-areas:
+        "date" 
+        "mood"
+        "journal"
+        "btn";
+        grid-template-columns: 1fr;
+        gap:24px;
+    }
+    .dialog form div:nth-child(3) {
+        height:250px;
+    }
+    .dialog {
+        height:fit-content;
+    }
+    
+}

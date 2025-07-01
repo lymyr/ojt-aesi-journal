@@ -1,0 +1,49 @@
+.entries {
+    display: grid;
+    gap:2px;
+    padding:32px;
+    background-color: rgb(159, 127, 103);
+    grid-template-columns: repeat(auto-fit, minmax(calc(32px + 5vw), 1fr));
+    grid-auto-rows: calc(52px + 5vw);
+}
+
+.entries > div {
+    background-color: rgb(243, 236, 228);
+    transition: 150ms;
+    cursor: pointer;
+    position: relative;
+}
+
+.entries > div:hover {
+    border-radius: 2px;
+    opacity: 0.8;
+    position: relative;
+    top:-1px;
+    left:-1px;
+    box-shadow: 1px 2px 4px rgb(0, 0, 0);
+}
+
+.entries p {
+    position:absolute;
+    left:4px;
+    top:4px;
+    font-size: calc(0.7rem + 0.5vw);
+    font-weight: bold;
+    color: rgb(83, 63, 56);
+}
+
+.Horrible {
+  background-color: rgb(255, 168, 168) !important;
+}
+.Bad {
+    background-color: rgb(255, 207, 207) !important;
+}
+.Neutral {
+    background-color: rgb(255, 251, 183) !important;
+}
+.Good {
+    background-color: rgb(238, 255, 228) !important;
+}
+.Great {
+    background-color: rgb(192, 255, 184) !important;
+}

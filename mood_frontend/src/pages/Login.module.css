@@ -1,0 +1,125 @@
+.container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    height: 100vh;
+}
+
+.container > *:nth-child(2) {
+    background-image:url(../assets/book.webp);
+    background-size: cover;
+    color:white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container > *:nth-child(2) > div {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    width:100%;
+    padding: 28px 12px;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+.container > *:nth-child(2) span {
+    font-size: 4rem;
+}
+.container > *:nth-child(2) > *:nth-child(2) {
+    position: absolute;
+    bottom: 8px;
+    right:8px;
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+}
+.container a {
+    color: rgb(181, 211, 255);
+    text-decoration: none;
+}
+
+
+
+
+.formAuth {
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    padding:2vw;
+    background-color: rgb(106, 90, 80);
+    color:white;
+}
+
+.formAuth h1 {
+    margin-bottom: 24px;
+    letter-spacing: 2px;
+    font-size: 3rem;
+    align-self: center;
+}
+
+.formAuth > div {
+    display:flex;
+    flex-direction: column;
+}
+
+.formAuth input {
+    padding: 4px 12px;
+    border-radius: 8px;
+    border:none;
+    outline: transparent;
+    background-color: rgb(241, 241, 241);
+    transition: 200ms;
+}
+.formAuth input:valid {
+    background-color: rgb(215, 231, 215);
+}
+.formAuth input:focus {
+    background-color: rgb(241, 241, 241);
+    box-shadow: 1px 1px 8px black;
+}
+.formAuth input::placeholder {
+    background-color: rgb(241, 241, 241);
+    color:rgb(204, 204, 204);
+}
+.formAuth input:not(:placeholder-shown):not(:focus):invalid {
+    background-color: rgb(241, 216, 216);
+}
+.formAuth label {
+    font-weight: bold;
+    text-align: left;
+    width: fit-content;
+    align-self: start;
+    margin-bottom: 4px;
+}
+
+.formAuth div:nth-child(3) {
+    margin-block: 12px;
+}
+.formAuth div:last-child {
+    display: flex;
+    flex-direction: row;
+    margin-top: 24px;
+    gap:10px;
+    justify-content: end;
+}
+
+
+
+.formAuth a:nth-child(1) button {
+    background-color: rgb(131, 117, 108);
+    color:rgb(215, 204, 196);
+    /* color: rgb(9, 9, 9); */
+}
+.formAuth a:nth-child(2) button {
+    background-color: rgb(183, 162, 144);
+    color: black;
+}
+
+.formAuth div > button:nth-child(1) {
+    background-color: rgb(131, 117, 108);
+    color:rgb(215, 204, 196);
+    /* color: rgb(9, 9, 9); */
+}
+.formAuth div > button:nth-child(2) {
+    background-color: rgb(183, 162, 144);
+    color: black;
+}
