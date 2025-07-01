@@ -52,10 +52,10 @@ const handleOpenDialog = (date) => {
   return (
     <div className={s.container}>
       <Header onClick={handleOpenDialog} />
-      <AddEntry ref={dialogRef} setEntryList={setEntryList} cDate={selectedDate}/> 
+      <AddEntry ref={dialogRef} setEntryList={setEntryList} cDate={selectedDate} currentDate={normalizeDate(currentDate)}/> 
       <AddEntry edit={true} ref={editRef} setEntryList={setEntryList} editEntry={selectedEntry}/>
       <ContentHeader text="Visualize" />
-      <FilterEntry year={year} month={month} setYear={setYear} setMonth={setMonth} cYear={currentDate.getFullYear()} cMonth={currentDate.getMonth()} />
+      <FilterEntry year={year} month={month} setYear={setYear} setMonth={setMonth} cYear={currentDate.getFullYear()} cMonth={currentDate.getMonth()} currentDate={normalizeDate(currentDate)}  />
       <Entries
   year={year}
   month={month}

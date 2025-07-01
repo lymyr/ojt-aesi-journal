@@ -23,7 +23,7 @@ axios.interceptors.request.use(config => {
 });
 
 
-function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate }) {
+function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate, currentDate }) {
     const [date, setDate] = useState(cDate);
     const [mood, setMood] = useState("");
     const [entry, setEntry] = useState("");
@@ -93,7 +93,7 @@ function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate }) 
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Date:</label>
-                    <input type="date" min='1900-01-01' max={new Date().toISOString().split("T")[0]} value={date} onChange={e => setDate(e.target.value)} required disabled={edit}/>
+                    <input type="date" min='1900-01-01' max={currentDate} value={date} onChange={e => setDate(e.target.value)} required disabled={edit}/>
                 </div>
 
                 <fieldset>
