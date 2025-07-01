@@ -6,7 +6,7 @@ function Entries({ year, month, onClick, entryList, normalizeDate }) {
 
   useEffect(() => {
     const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month+1, 0);
+    const lastDay = new Date(year, month + 1, 0);
     const allDays = [];
 
     for (let d = new Date(firstDay); d <= lastDay; d.setDate(d.getDate() + 1)) {
@@ -18,27 +18,27 @@ function Entries({ year, month, onClick, entryList, normalizeDate }) {
 
   return (
     <div className={styles.entries}>
-
       {days.map((date, i) => {
         const entry = entryList.find(
-            (entry) =>
-            normalizeDate(new Date(entry.date)) === normalizeDate(date)
+          (entry) => normalizeDate(new Date(entry.date)) === normalizeDate(date)
         );
 
         const moodClass = entry ? styles[`${entry.mood}`] || '' : '';
-        // const clickedDate = new Date(year, month, i + 1);
+
         return (
-            <div
-              key={i}
-              onClick={() => {if (entry) onClick(entry);}}
-              className={`${styles.entryBox} ${moodClass}`}
-              title={date.toDateString()}
-            >
-              <p>{i+1}</p>
-            </div>
-          );})}
+          <div
+            key={i}
+            onClick={() => onClick(date, entry)}
+            className={`${styles.entryBox} ${moodClass}`}
+            title={date.toDateString()}
+          >
+            <p>{i + 1}</p>
+          </div>
+        );
+      })}
     </div>
   );
 }
+
 
 export default Entries;

@@ -21,9 +21,11 @@ function Home() {
   const [month, setMonth] = useState(currentDate.getMonth())
   const [entryList, setEntryList] = useState([]);
 
-  const handleOpenDialog = () => {
-    dialogRef.current?.showModal();
-  };
+  const [selectedDate, setSelectedDate] = useState(normalizeDate(currentDate));
+const handleOpenDialog = (date) => {
+  setSelectedDate(normalizeDate(date));
+  dialogRef.current?.showModal();
+};
 
   const handleOpenEdit = (entry) => {
     setSelectedEntry(entry);
@@ -50,11 +52,18 @@ function Home() {
   return (
     <div className={s.container}>
       <Header onClick={handleOpenDialog} />
-      <AddEntry ref={dialogRef} setEntryList={setEntryList} cDate={normalizeDate(currentDate)}/> 
+      <AddEntry ref={dialogRef} setEntryList={setEntryList} cDate={selectedDate}/> 
       <AddEntry edit={true} ref={editRef} setEntryList={setEntryList} editEntry={selectedEntry}/>
       <ContentHeader text="Visualize" />
       <FilterEntry year={year} month={month} setYear={setYear} setMonth={setMonth} cYear={currentDate.getFullYear()} cMonth={currentDate.getMonth()} />
-      <Entries year={year} month={month} onClick={handleOpenEdit} entryList={entryList} normalizeDate={normalizeDate} />
+      <Entries
+  year={year}
+  month={month}
+  onClick={(date, entry) => entry ? handleOpenEdit(entry) : handleOpenDialog(date)}
+  entryList={entryList}
+  normalizeDate={normalizeDate}
+/>
+
       <div className={s.view}>
         <View onClick={handleOpenEdit} normalizeDate={normalizeDate} entryList={entryList} year={year} month={month}/>
       </div>

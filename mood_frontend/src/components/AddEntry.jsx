@@ -31,20 +31,17 @@ function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate }) 
 
     useEffect(() => {
         if (edit && editEntry) {
-            setDate(editEntry.date || getTodayDate());
+            setDate(editEntry.date || cDate);
             setMood(editEntry.mood || "");
             setEntry(editEntry.journal_entry || "");
         }
     }, [edit, editEntry]);
 
-    function getTodayDate() {
-        let today = new Date();
-        let dd = String(today.getDate()).padStart(2, '0');
-        let mm = String(today.getMonth() + 1).padStart(2, '0');
-        let yyyy = today.getFullYear();
-        return `${yyyy}-${mm}-${dd}`;
-    }
-
+    useEffect(() => {
+        if (!edit) {
+            setDate(cDate);
+        }
+    }, [cDate, edit]);
 
     function handleDelete() {
         if (!editEntry || !editEntry.id) {
@@ -96,7 +93,7 @@ function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate }) 
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Date:</label>
-                    <input type="date" min='1900-01-01' max={cDate} value={date} onChange={e => setDate(e.target.value)} required disabled={edit}/>
+                    <input type="date" min='1900-01-01' max={new Date().toISOString().split("T")[0]} value={date} onChange={e => setDate(e.target.value)} required disabled={edit}/>
                 </div>
 
                 <fieldset>
@@ -133,7 +130,7 @@ function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate }) 
 
                     {edit? (clickedEdit? 
                                 <>
-                                <Button text="Delete" type="button" onClick={handleDelete}/> 
+                                <Button text="Delete" type="button" onClick={() => {handleDelete(); setclickedEdit(false);}}/> 
                                 <Button text="Save" />
                                 </> 
                             : <Button text="Edit" type="button" onClick={() => setclickedEdit(true)}/>)
