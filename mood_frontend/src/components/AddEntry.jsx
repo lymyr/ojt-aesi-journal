@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import s from "./AddEntry.module.css";
 import Button from "./Button";
+import ModalView from "./ModalView";
 
 
 function getCookie(name) {
@@ -28,6 +29,8 @@ function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate, cu
     const [mood, setMood] = useState("");
     const [entry, setEntry] = useState("");
     const [clickedEdit, setclickedEdit] = useState(false);
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+    const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
     useEffect(() => {
         if (edit && editEntry) {
@@ -48,21 +51,28 @@ function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate, cu
             alert("No entry selected to delete.");
             return;
         }
+        setPendingDeleteId(editEntry.id);
+        setShowConfirmDialog(true);
+    }
 
-        if (!confirm("Are you sure you want to delete this entry?")) return;
-
+    function handleConfirmDelete() {
+        setShowConfirmDialog(false);
         axios.get('/sanctum/csrf-cookie').then(() => {
-            axios.delete(`/api/entries/${editEntry.id}`)
+            axios.delete(`/api/entries/${pendingDeleteId}`)
                 .then(() => {
                     ref?.current?.close();
-                    axios.get('/api/entries')
-                        .then(r => setEntryList(r.data)); // refresh the list
+                    axios.get('/api/entries').then(r => setEntryList(r.data));
                 })
                 .catch(err => {
                     console.error("Failed to delete entry:", err);
                     alert("Delete failed.");
                 });
         });
+    }
+
+    function handleCancelDelete() {
+        setShowConfirmDialog(false);
+        setPendingDeleteId(null);
     }
 
     function handleSubmit(e) {
@@ -89,6 +99,7 @@ function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate, cu
 
 
     return (
+        <>
         <dialog className={s.dialog} ref={ref}>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -130,7 +141,7 @@ function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate, cu
 
                     {edit? (clickedEdit? 
                                 <>
-                                <Button text="Delete" type="button" onClick={() => {handleDelete(); setclickedEdit(false);}}/> 
+                                <Button text="Delete" type="button" onClick={() => {handleDelete();}}/> 
                                 <Button text="Save" />
                                 </> 
                             : <Button text="Edit" type="button" onClick={() => setclickedEdit(true)}/>)
@@ -139,6 +150,15 @@ function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate, cu
                 </div>
             </form>
         </dialog>
+        {edit===true? <ModalView 
+    text="Are you sure you want to delete this entry?" 
+    open={showConfirmDialog}
+    onCancel={handleCancelDelete}
+    onConfirm={handleConfirmDelete}
+    setclickedEdit={setclickedEdit}
+/>: null}
+
+        </>
     );
     }
 

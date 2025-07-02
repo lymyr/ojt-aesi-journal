@@ -56,14 +56,7 @@ const handleOpenDialog = (date) => {
       <AddEntry edit={true} ref={editRef} setEntryList={setEntryList} editEntry={selectedEntry}/>
       <ContentHeader text="Visualize" />
       <FilterEntry year={year} month={month} setYear={setYear} setMonth={setMonth} cYear={currentDate.getFullYear()} cMonth={currentDate.getMonth()} currentDate={normalizeDate(currentDate)}  />
-      <Entries
-  year={year}
-  month={month}
-  onClick={(date, entry) => entry ? handleOpenEdit(entry) : handleOpenDialog(date)}
-  entryList={entryList}
-  normalizeDate={normalizeDate}
-/>
-
+      <Entries year={year} month={month} onClick={(date, entry) => entry ? handleOpenEdit(entry) : handleOpenDialog(date)} entryList={entryList} normalizeDate={normalizeDate} />
       <div className={s.view}>
         <View onClick={handleOpenEdit} normalizeDate={normalizeDate} entryList={entryList} year={year} month={month}/>
       </div>
