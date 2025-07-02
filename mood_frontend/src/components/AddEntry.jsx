@@ -4,13 +4,13 @@ import s from "./AddEntry.module.css";
 import Button from "./Button";
 import ModalView from "./ModalView";
 
-
-
 axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.withCredentials = true;
+axios.defaults.withXSRFToken = true;
 
 
 function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate, currentDate }) {
-    const [date, setDate] = useState(cDate);
+    const [date, setDate] = useState(currentDate);
     const [mood, setMood] = useState("");
     const [entry, setEntry] = useState("");
     const [clickedEdit, setclickedEdit] = useState(false);
@@ -18,18 +18,16 @@ function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate, cu
     const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
     useEffect(() => {
-        if (edit && editEntry) {
+        if (cDate === "NaN-NaN-NaN") {
+            setDate(currentDate);
+        } else if (edit && editEntry) {
             setDate(editEntry.date || cDate);
             setMood(editEntry.mood || "");
             setEntry(editEntry.journal_entry || "");
+        } else {
+            setDate(cDate)
         }
-    }, [edit, editEntry]);
-
-    useEffect(() => {
-        if (!edit) {
-            setDate(cDate);
-        }
-    }, [cDate, edit]);
+    }, [edit, editEntry, cDate]);
 
     function handleDelete() {
         if (!editEntry || !editEntry.id) {
@@ -42,17 +40,15 @@ function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate, cu
 
     function handleConfirmDelete() {
         setShowConfirmDialog(false);
-        axios.get('/sanctum/csrf-cookie').then(() => {
-            axios.delete(`/api/entries/${pendingDeleteId}`)
-                .then(() => {
-                    ref?.current?.close();
-                    axios.get('/api/entries').then(r => setEntryList(r.data));
-                })
-                .catch(err => {
-                    console.error("Failed to delete entry:", err);
-                    alert("Delete failed.");
-                });
-        });
+        axios.delete(`/api/entries/${pendingDeleteId}`)
+            .then(() => {
+                ref?.current?.close();
+                axios.get('/api/entries').then(r => setEntryList(r.data));
+            })
+            .catch(err => {
+                console.error("Failed to delete entry:", err);
+                alert("Delete failed.");
+            });
     }
 
     function handleCancelDelete() {
@@ -62,24 +58,21 @@ function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate, cu
 
     function handleSubmit(e) {
         e.preventDefault();
-
-        axios.get('/sanctum/csrf-cookie').then(() => {
                 axios.post('/api/entries', {
                 mood: mood, 
                 journal_entry: entry,
                 date: date
-            }).then(res => {
+            }).then(() => {
                 ref?.current?.close();
                 axios.get('/api/entries')
                     .then(r => setEntryList(r.data));
-                setDate(cDate);
+                setDate(currentDate);
                 setMood("");
                 setEntry("");
             }).catch(err => {
                 console.error(err);
                 alert('Failed to save journal entry.');
             });
-        });
     }
 
 

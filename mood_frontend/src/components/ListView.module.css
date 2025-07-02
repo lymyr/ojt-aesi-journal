@@ -88,9 +88,15 @@
 .arrowContainer button:hover {
     position: relative;
     bottom:-1px;
-    box-shadow: 2px -2px 4px black;
+    box-shadow: 0px 2px 6px black;
     background-color: rgb(213, 194, 187);
     transition: 200ms;
+}
+.arrowContainer button:active {
+    position: relative;
+    bottom:-4px;
+    box-shadow: none;
+    background-color: rgb(235, 219, 213);
 }
 
 @media only screen and (max-width: 600px) {
