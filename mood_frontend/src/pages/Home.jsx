@@ -6,10 +6,10 @@ import Entries from "../components/Entries";
 import FilterEntry from "../components/FilterEntry";
 import Header from "../components/Header";
 import View from "../components/View";
+import ListView from "../components/ListView";
 import s from "./Home.module.css";
 
 axios.defaults.baseURL = 'http://localhost:8000';
-axios.defaults.withCredentials = true;
 
 function Home() {
   const dialogRef = useRef(null);
@@ -22,10 +22,10 @@ function Home() {
   const [entryList, setEntryList] = useState([]);
 
   const [selectedDate, setSelectedDate] = useState(normalizeDate(currentDate));
-const handleOpenDialog = (date) => {
-  setSelectedDate(normalizeDate(date));
-  dialogRef.current?.showModal();
-};
+  const handleOpenDialog = (date) => {
+    setSelectedDate(normalizeDate(date));
+    dialogRef.current?.showModal();
+  };
 
   const handleOpenEdit = (entry) => {
     setSelectedEntry(entry);
@@ -57,8 +57,9 @@ const handleOpenDialog = (date) => {
       <ContentHeader text="Visualize" />
       <FilterEntry year={year} month={month} setYear={setYear} setMonth={setMonth} cYear={currentDate.getFullYear()} cMonth={currentDate.getMonth()} currentDate={normalizeDate(currentDate)}  />
       <Entries year={year} month={month} onClick={(date, entry) => entry ? handleOpenEdit(entry) : handleOpenDialog(date)} entryList={entryList} normalizeDate={normalizeDate} />
+      <ContentHeader text="All Entries" />
       <div className={s.view}>
-        <View onClick={handleOpenEdit} normalizeDate={normalizeDate} entryList={entryList} year={year} month={month}/>
+        <ListView onClick={handleOpenEdit} normalizeDate={normalizeDate} entryList={entryList} year={year} month={month} />
       </div>
     </div>
   );

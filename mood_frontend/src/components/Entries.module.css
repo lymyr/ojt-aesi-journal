@@ -32,18 +32,18 @@
     color: rgb(83, 63, 56);
 }
 
-.Horrible {
+.entries .Horrible {
   background-color: rgb(255, 168, 168) !important;
 }
-.Bad {
+.entries .Bad {
     background-color: rgb(255, 207, 207) !important;
 }
-.Neutral {
+.entries .Neutral {
     background-color: rgb(255, 251, 183) !important;
 }
-.Good {
+.entries .Good {
     background-color: rgb(238, 255, 228) !important;
 }
-.Great {
+.entries .Great {
     background-color: rgb(192, 255, 184) !important;
 }

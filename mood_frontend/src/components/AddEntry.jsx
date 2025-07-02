@@ -5,23 +5,8 @@ import Button from "./Button";
 import ModalView from "./ModalView";
 
 
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-}
 
 axios.defaults.baseURL = 'http://localhost:8000';
-axios.defaults.withCredentials = true;
-axios.defaults.withXSRFToken = true;
-
-axios.interceptors.request.use(config => {
-  const token = getCookie('XSRF-TOKEN');
-  if (token) {
-    config.headers['X-XSRF-TOKEN'] = decodeURIComponent(token);
-  }
-  return config;
-});
 
 
 function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate, currentDate }) {

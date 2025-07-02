@@ -11,5 +11,6 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/entries', [JournalEntryController::class, 'store']);
 Route::get('/entries', [JournalEntryController::class, 'index']);
+Route::get('/entries/month/{yearMonth}', [JournalEntryController::class, 'getMonthlyEntries']);
 Route::delete('/entries/{id}', [JournalEntryController::class, 'destroy']);
 Route::patch('/entries/{id}', [JournalEntryController::class, 'update']);

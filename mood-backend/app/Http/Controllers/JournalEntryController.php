@@ -18,6 +18,16 @@ class JournalEntryController extends Controller
         return response()->json(['message' => 'Entry deleted successfully.']);
     }
 
+    public function getMonthlyEntries($yearMonth)
+    {
+        if (!preg_match('/^\d{4}-\d{2}$/', $yearMonth)) {
+            return response()->json(['error' => 'Invalid format. Use YYYY-MM'], 400);
+        }
+        return JournalEntry::where('date', 'like', $yearMonth . '%')
+            ->orderBy('date', 'asc')
+            ->get();
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
