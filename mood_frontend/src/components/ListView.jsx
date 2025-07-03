@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 import s from "./ListView.module.css";
 
-function ListView({ onClick, entryList }) {
-    const [page, setPage] = useState(1);
+axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.withCredentials = true;
+axios.defaults.withXSRFToken = true;
+
+function ListView({ onClick, page, pageView, setPageView, sortOrder, refreshView }) {
+    useEffect(() => {
+        axios.get(`/api/entries?page=${page}&sort=${sortOrder}`)
+        .then(res => {
+            setPageView(res.data);
+        })
+        .catch(err => {
+            console.error("Failed to load entries:", err);
+        });
+    }, [page, sortOrder, refreshView]);
 
     return (
         <>
-        <div className={`${s.arrowContainer} ${s.top}`}>
-            {page > 1 ? <button onClick={() => setPage(page-1)}>&lt;</button> : <button>&lt;</button>}
-            <p>{page}</p>
-            {page <= 5 ? <button onClick={() => setPage(page+1)}>&gt;</button> : <button>&gt;</button>}   
-        </div>
-
         <table className={s.container}>
             <thead>
                 <tr>
@@ -21,7 +28,7 @@ function ListView({ onClick, entryList }) {
                 </tr>
             </thead>
             <tbody>
-                {entryList.map((entry, i) => {
+                {pageView.data.map((entry, i) => {
                     const moodClass = entry.mood.toLowerCase();
                     return (
                     <tr key={i} onClick={() => onClick(entry)}>
@@ -32,13 +39,6 @@ function ListView({ onClick, entryList }) {
                 })}
             </tbody>
         </table>
-
-
-        <div className={s.arrowContainer}>
-            {page > 1 ? <button onClick={() => setPage(page-1)}>&lt;</button> : <button>&lt;</button>}
-            <p>{page}</p>
-            {page <= 5 ? <button onClick={() => setPage(page+1)}>&gt;</button> : <button>&gt;</button>}   
-        </div>
         </>
     );
 }

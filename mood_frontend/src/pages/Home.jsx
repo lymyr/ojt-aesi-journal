@@ -8,6 +8,8 @@ import Header from "../components/Header";
 import View from "../components/View";
 import ListView from "../components/ListView";
 import s from "./Home.module.css";
+import Button from "../components/Button";
+import PageControls from "../components/PageControls";
 
 axios.defaults.baseURL = 'http://localhost:8000';
 
@@ -15,11 +17,16 @@ function Home() {
   const dialogRef = useRef(null);
   const editRef = useRef(null);
   const [selectedEntry, setSelectedEntry] = useState(null);
+  const [paginationView, setPaginationView] = useState(true);
+  const [sortOrder, setSortOrder] = useState("desc");
 
   const currentDate = new Date();
   const [year, setYear] = useState(currentDate.getFullYear());
   const [month, setMonth] = useState(currentDate.getMonth())
-  const [entryList, setEntryList] = useState([]);
+  const [refreshView, setRefreshView] = useState(false);
+
+  const [page, setPage] = useState(1);
+  const [pageView, setPageView] = useState({ data: [], last_page: 1 });
 
   const [selectedDate, setSelectedDate] = useState(normalizeDate(currentDate));
   const handleOpenDialog = (date) => {
@@ -39,7 +46,7 @@ function Home() {
   }
 
   useEffect(() => {
-    axios.get("/api/entries")
+    axios.get("/api/entries/all")
       .then(res => {
         setEntryList(res.data);
       })
@@ -52,14 +59,23 @@ function Home() {
   return (
     <div className={s.container}>
       <Header onClick={handleOpenDialog} />
-      <AddEntry ref={dialogRef} setEntryList={setEntryList} cDate={selectedDate} currentDate={normalizeDate(currentDate)}/> 
-      <AddEntry edit={true} ref={editRef} setEntryList={setEntryList} editEntry={selectedEntry}/>
+      <AddEntry ref={dialogRef}  cDate={selectedDate} currentDate={normalizeDate(currentDate)} page={page} setPageView={setPageView} setRefreshView={setRefreshView}/> 
+      <AddEntry edit={true} ref={editRef} editEntry={selectedEntry} page={page} setPageView={setPageView} setRefreshView={setRefreshView}/>
       <ContentHeader text="Visualize" />
-      <FilterEntry year={year} month={month} setYear={setYear} setMonth={setMonth} cYear={currentDate.getFullYear()} cMonth={currentDate.getMonth()} currentDate={normalizeDate(currentDate)}  />
-      <Entries year={year} month={month} onClick={(date, entry) => entry ? handleOpenEdit(entry) : handleOpenDialog(date)} entryList={entryList} normalizeDate={normalizeDate} />
+      <FilterEntry year={year} month={month} setYear={setYear} setMonth={setMonth} cYear={currentDate.getFullYear()} cMonth={currentDate.getMonth()} currentDate={normalizeDate(currentDate)}/>
+      <Entries year={year} month={month} onClick={(date, entry) => entry ? handleOpenEdit(entry) : handleOpenDialog(date)} normalizeDate={normalizeDate} refreshView={refreshView} />
       <ContentHeader text="All Entries" />
+      <div className={s.controlContainer}>
+            <Button text={sortOrder === "asc" ? "Date Descending" : "Date Ascending"} onClick={() => {setSortOrder(sortOrder === "asc" ? "desc" : "asc"); setPage(1)}} />
+            <Button paginationView text={paginationView ? "Old View" : "New View"} onClick={() => setPaginationView(!paginationView)}/>
+      </div>
       <div className={s.view}>
-        <ListView onClick={handleOpenEdit} normalizeDate={normalizeDate} entryList={entryList} year={year} month={month} />
+        <PageControls setPage={setPage} page={page} pageView={pageView}/>
+        {paginationView ? (
+            <ListView onClick={handleOpenEdit} page={page} setPageView={setPageView} pageView={pageView} sortOrder={sortOrder} refreshView={refreshView} />
+            ) : (
+            <View onClick={handleOpenEdit} page={page} setPageView={setPageView} pageView={pageView} sortOrder={sortOrder} refreshView={refreshView} />)}
+        <PageControls setPage={setPage} page={page} pageView={pageView}/>
       </div>
     </div>
   );

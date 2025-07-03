@@ -6,7 +6,7 @@ axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;
 
-function Entries({ year, month, onClick, normalizeDate }) {
+function Entries({ year, month, onClick, normalizeDate, refreshView }) {
   const [days, setDays] = useState([]);
   const [monthlyEntries, setMonthlyEntries] = useState([]);
 
@@ -32,7 +32,7 @@ function Entries({ year, month, onClick, normalizeDate }) {
       .catch(err => {
         console.error("Failed to load entries:", err);
       });
-  }, [year, month]);
+  }, [year, month, refreshView]);
 
   
 

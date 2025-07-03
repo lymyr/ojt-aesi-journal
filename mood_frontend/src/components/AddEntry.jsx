@@ -9,7 +9,7 @@ axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;
 
 
-function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate, currentDate }) {
+function AddEntry({ edit = false, ref, page, setPageView, editEntry = null, cDate, currentDate, setRefreshView }) {
     const [date, setDate] = useState(currentDate);
     const [mood, setMood] = useState("");
     const [entry, setEntry] = useState("");
@@ -43,7 +43,8 @@ function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate, cu
         axios.delete(`/api/entries/${pendingDeleteId}`)
             .then(() => {
                 ref?.current?.close();
-                axios.get('/api/entries').then(r => setEntryList(r.data));
+                axios.get(`/api/entries?page=${page}`).then(r => setPageView(r.data));
+                setRefreshView(prev => !prev);
             })
             .catch(err => {
                 console.error("Failed to delete entry:", err);
@@ -64,8 +65,8 @@ function AddEntry({ edit = false, ref, setEntryList, editEntry = null, cDate, cu
                 date: date
             }).then(() => {
                 ref?.current?.close();
-                axios.get('/api/entries')
-                    .then(r => setEntryList(r.data));
+                axios.get(`/api/entries?page=${page}`).then(r => setPageView(r.data));
+                setRefreshView(prev => !prev);
                 setDate(currentDate);
                 setMood("");
                 setEntry("");

@@ -10,6 +10,11 @@ class JournalEntryController extends Controller
     {
         return JournalEntry::orderBy('date', 'desc')->get();
     }
+    public function getPage(Request $request)
+    {
+        $sort = $request->query('sort');
+        return JournalEntry::orderBy('date', $sort)->paginate(8);
+    }
     public function destroy($id)
     {
         $entry = JournalEntry::findOrFail($id);

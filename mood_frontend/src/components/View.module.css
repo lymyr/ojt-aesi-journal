@@ -2,9 +2,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     color: rgb(65, 65, 65);
-    margin: 20px 32px;
-    margin-bottom: 0;
-    padding-bottom: 32px;
+    margin: 0px 32px;
     gap:12px;
 }
 
