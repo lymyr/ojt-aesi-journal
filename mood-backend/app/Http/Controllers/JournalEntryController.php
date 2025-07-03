@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\JournalEntry;
+use Illuminate\Support\Facades\DB;
 
 class JournalEntryController extends Controller
 {
@@ -12,9 +13,27 @@ class JournalEntryController extends Controller
     }
     public function getPage(Request $request)
     {
-        $sort = $request->query('sort');
-        return JournalEntry::orderBy('date', $sort)->paginate(8);
+        $sort = $request->query('sort', 'asc');
+        $mood = $request->query('mood');
+        $query = JournalEntry::orderBy('date', $sort);
+
+        if ($mood) {
+            $query->where('mood', $mood);
+        }
+
+        return $query->paginate(8);
     }
+    public function getMoods()
+    {
+        $moods = DB::table('journal_entries')
+            ->select('mood')
+            ->distinct()
+            ->orderByRaw("field(mood, 'Great', 'Good', 'Neutral', 'Bad', 'Horrible')")
+            ->pluck('mood');
+
+        return response()->json($moods);
+    }
+
     public function destroy($id)
     {
         $entry = JournalEntry::findOrFail($id);

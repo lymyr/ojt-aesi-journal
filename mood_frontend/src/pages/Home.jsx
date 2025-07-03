@@ -19,6 +19,8 @@ function Home() {
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [paginationView, setPaginationView] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
+  const [moods, setMoods] = useState([]);
+  const [selectedMood, setSelectedMood] = useState("");
 
   const currentDate = new Date();
   const [year, setYear] = useState(currentDate.getFullYear());
@@ -46,12 +48,12 @@ function Home() {
   }
 
   useEffect(() => {
-    axios.get("/api/entries/all")
+    axios.get("/api/moods")
       .then(res => {
-        setEntryList(res.data);
+        setMoods(res.data);
       })
       .catch(err => {
-        console.error("Failed to load entries:", err);
+        console.error("Failed to load moods:", err);
       });
   }, []);
 
@@ -66,15 +68,21 @@ function Home() {
       <Entries year={year} month={month} onClick={(date, entry) => entry ? handleOpenEdit(entry) : handleOpenDialog(date)} normalizeDate={normalizeDate} refreshView={refreshView} />
       <ContentHeader text="All Entries" />
       <div className={s.controlContainer}>
+            <select value={selectedMood} onChange={e => setSelectedMood(e.target.value)}>
+              <option value="">All Moods</option>
+              {moods.map((mood, i) => (
+                <option key={i} value={mood}>{mood}</option>))}
+            </select>
+
             <Button text={sortOrder === "asc" ? "Date Descending" : "Date Ascending"} onClick={() => {setSortOrder(sortOrder === "asc" ? "desc" : "asc"); setPage(1)}} />
             <Button paginationView text={paginationView ? "Old View" : "New View"} onClick={() => setPaginationView(!paginationView)}/>
       </div>
       <div className={s.view}>
         <PageControls setPage={setPage} page={page} pageView={pageView}/>
         {paginationView ? (
-            <ListView onClick={handleOpenEdit} page={page} setPageView={setPageView} pageView={pageView} sortOrder={sortOrder} refreshView={refreshView} />
+            <ListView onClick={handleOpenEdit} page={page} setPageView={setPageView} pageView={pageView} sortOrder={sortOrder} refreshView={refreshView} selectedMood={selectedMood} />
             ) : (
-            <View onClick={handleOpenEdit} page={page} setPageView={setPageView} pageView={pageView} sortOrder={sortOrder} refreshView={refreshView} />)}
+            <View onClick={handleOpenEdit} page={page} setPageView={setPageView} pageView={pageView} sortOrder={sortOrder} refreshView={refreshView} selectedMood={selectedMood} />)}
         <PageControls setPage={setPage} page={page} pageView={pageView}/>
       </div>
     </div>

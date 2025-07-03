@@ -13,5 +13,6 @@ Route::post('/entries', [JournalEntryController::class, 'store']);
 Route::get('/entries/all', [JournalEntryController::class, 'index']);
 Route::get('/entries', [JournalEntryController::class, 'getPage']);
 Route::get('/entries/month/{yearMonth}', [JournalEntryController::class, 'getMonthlyEntries']);
+Route::get('/moods', [JournalEntryController::class, 'getMoods']);
 Route::delete('/entries/{id}', [JournalEntryController::class, 'destroy']);
 Route::patch('/entries/{id}', [JournalEntryController::class, 'update']);

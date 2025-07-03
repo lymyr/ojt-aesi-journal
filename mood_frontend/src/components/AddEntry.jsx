@@ -65,6 +65,7 @@ function AddEntry({ edit = false, ref, page, setPageView, editEntry = null, cDat
                 date: date
             }).then(() => {
                 ref?.current?.close();
+                setclickedEdit(false);
                 axios.get(`/api/entries?page=${page}`).then(r => setPageView(r.data));
                 setRefreshView(prev => !prev);
                 setDate(currentDate);

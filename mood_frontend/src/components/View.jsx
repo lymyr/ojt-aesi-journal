@@ -6,12 +6,12 @@ axios.defaults.baseURL = 'http://localhost:8000';
 axios.defaults.withCredentials = true;
 axios.defaults.withXSRFToken = true;
 
-function View({ onClick, page, setPageView, pageView, sortOrder, refreshView }) {
+function View({ onClick, page, setPageView, pageView, sortOrder, refreshView, selectedMood }) {
   useEffect(() => {
-    axios.get(`/api/entries?page=${page}&sort=${sortOrder}`)
+    axios.get(`/api/entries?page=${page}&sort=${sortOrder}${selectedMood ? `&mood=${selectedMood}` : ""}`)
       .then(res => setPageView(res.data))
       .catch(err => console.error("Failed to load entries:", err));
-  }, [page, sortOrder, refreshView]);
+  }, [page, sortOrder, refreshView, selectedMood]);
 
   function normalizeDate(date) {
     return new Date(date).getFullYear() + '-' +
