@@ -68,13 +68,13 @@ function Home() {
       <Entries year={year} month={month} onClick={(date, entry) => entry ? handleOpenEdit(entry) : handleOpenDialog(date)} normalizeDate={normalizeDate} refreshView={refreshView} />
       <ContentHeader text="All Entries" />
       <div className={s.controlContainer}>
-            <select value={selectedMood} onChange={e => setSelectedMood(e.target.value)}>
+            <select value={selectedMood} onChange={e => {setSelectedMood(e.target.value); setPage(1);}}>
               <option value="">All Moods</option>
               {moods.map((mood, i) => (
                 <option key={i} value={mood}>{mood}</option>))}
             </select>
 
-            <Button text={sortOrder === "asc" ? "Date Descending" : "Date Ascending"} onClick={() => {setSortOrder(sortOrder === "asc" ? "desc" : "asc"); setPage(1)}} />
+            <Button text={sortOrder === "asc" ? "Date Descending" : "Date Ascending"} onClick={() => {setSortOrder(sortOrder === "asc" ? "desc" : "asc"); setPage(1);}} />
             <Button paginationView text={paginationView ? "Old View" : "New View"} onClick={() => setPaginationView(!paginationView)}/>
       </div>
       <div className={s.view}>

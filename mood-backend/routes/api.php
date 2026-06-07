@@ -10,7 +10,6 @@ Route::get('/user', function (Request $request) {
 
 
 Route::post('/entries', [JournalEntryController::class, 'store']);
-Route::get('/entries/all', [JournalEntryController::class, 'index']);
 Route::get('/entries', [JournalEntryController::class, 'getPage']);
 Route::get('/entries/month/{yearMonth}', [JournalEntryController::class, 'getMonthlyEntries']);
 Route::get('/moods', [JournalEntryController::class, 'getMoods']);

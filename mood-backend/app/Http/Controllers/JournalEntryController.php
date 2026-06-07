@@ -7,10 +7,6 @@ use Illuminate\Support\Facades\DB;
 
 class JournalEntryController extends Controller
 {
-    public function index()
-    {
-        return JournalEntry::orderBy('date', 'desc')->get();
-    }
     public function getPage(Request $request)
     {
         $sort = $request->query('sort', 'asc');
